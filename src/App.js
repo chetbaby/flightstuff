@@ -10,26 +10,19 @@ import './skeleton.css';
 import './App.css';
 
 function App() {
-  const [flightDATA, setFlightDATA] = useState();
+  const [flightDATA, setFlightDATA] = useState(
+    flightsAPI.sort((a, b) => a.departuretime - b.departuretime)
+  );
   const [planesDATA, setPlanesDATA] = useState();
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setFlightDATA(flightsAPI);
-      setPlanesDATA(planesAPI);
-    }, 0);
-    setLoading(false);
-  }, []);
 
   return (
     <main className="container">
       <DateNav />
       <section>
-        <AircraftDisplay planes={planesDATA} />
-        <RotationDisplay />
-        <FlightPlanDisplay />
+        <AircraftDisplay list={planesDATA} />
+        <RotationDisplay list={flightDATA} isLoading={loading} />
+        <FlightPlanDisplay list="" />
       </section>
     </main>
   );
