@@ -14,15 +14,37 @@ function App() {
     flightsAPI.sort((a, b) => a.departuretime - b.departuretime)
   );
   const [planesDATA, setPlanesDATA] = useState();
-  const [loading, setLoading] = useState(false);
+  const [currentRotation, setCurrentRotation] = useState([]);
+  const [currAirport, setCurrAirport] = useState('');
+  const [currDepartureTime, setCurrDepartureTime] = useState(0);
+
+  const onFlightAdd = id => {
+    setCurrentRotation([
+      ...currentRotation,
+      flightsAPI.find(el => el.ident === id),
+    ]);
+  };
+
+  const onFlightRemove = id => {
+    setCurrentRotation(currentRotation.filter(flight => flight.ident !== id));
+  };
 
   return (
     <main className="container">
       <DateNav />
       <section>
         <AircraftDisplay list={planesDATA} />
-        <RotationDisplay list={flightDATA} isLoading={loading} />
-        <FlightPlanDisplay list="" />
+        <RotationDisplay
+          list={flightDATA}
+          addFlight={onFlightAdd}
+          currentRotation={currentRotation}
+        />
+        <FlightPlanDisplay
+          list={currentRotation}
+          currentDepartureTime={setCurrDepartureTime}
+          currentAirport={setCurrAirport}
+          removeFlight={onFlightRemove}
+        />
       </section>
     </main>
   );
