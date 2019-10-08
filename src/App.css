@@ -3,3 +3,17 @@
 	justify-content: space-between;
 	margin-top: 8rem;
 }
+
+hr {
+	width: 30%;
+}
+
+.section-col {
+	height: 700px;
+	padding: 1rem;
+	background-color: #eee;
+}
+
+.center {
+	text-align: center;
+}

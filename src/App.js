@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import ReactJson from 'react-json-view';
 import DateNav from './DateNav';
 import AircraftDisplay from './AircraftDisplay';
 import RotationDisplay from './RotationDisplay';
@@ -28,7 +27,7 @@ function App() {
     <main className="container">
       <DateNav />
       <section>
-        <AircraftDisplay />
+        <AircraftDisplay planes={planesDATA} />
         <RotationDisplay />
         <FlightPlanDisplay />
       </section>

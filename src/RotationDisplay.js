@@ -1,7 +1,13 @@
 import React from 'react';
+import H5Title from './H5Title';
 
-function RotationDisplay() {
-  return <div>c</div>;
-}
+const RotationDisplay = () => (
+  <section className="section-col columns six">
+    <H5Title title="Rotation" align="center" />
+    <hr />
+    {/* <ResultsDiv>
+    </ResultsDiv> */}
+  </section>
+);
 
 export default RotationDisplay;
