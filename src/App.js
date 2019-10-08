@@ -13,7 +13,7 @@ function App() {
   const [flightDATA, setFlightDATA] = useState(
     flightsAPI.sort((a, b) => a.departuretime - b.departuretime)
   );
-  const [planesDATA, setPlanesDATA] = useState();
+  const [planesDATA, setPlanesDATA] = useState(planesAPI);
   const [currentRotation, setCurrentRotation] = useState([]);
   const [currAirport, setCurrAirport] = useState('');
   const [currDepartureTime, setCurrDepartureTime] = useState(0);
