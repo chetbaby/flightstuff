@@ -1,68 +1,55 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Install
+### `npm install`
+## Run
+### `npm run dev`
 
 In the project directory, you can run:
 
-### `npm start`
 
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
+## Deploy
 ### `npm run build`
 
 Builds the app for production to the `build` folder.<br>
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Approach 🛬
+I followed the UI schematic provided in the readme for the most part. I chose to omit the progress bar on the bottom of the page due to time constraints. In all, **I spent arount 2.5 hours coding this app**. Previous to that, I spent an additional 1.5-2 hours reading the documentation and looking over the data model.
 
-### `npm run eject`
+This app was bootstrapped using my own template repo of `create-react-app`. It provides me with a minimal `express` server (not used) w/ server proxying, a `skeleton.css` file, `eslint` and `prettier`, and most of the extraneous `create-react-app` boilerplate removed. Everything else was coded from scratch— save a few css rules.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Function/Strategy
+I used functional components with `hooks` exclusively throughout this app. My initial plan was to also involve the `Context API` and distribute state via `useContext`, but I chose not to in the end. The data is served in separate files and the app does not fetch from the `API`. This allowed me to scaffold out logic quickly.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The `<Flight>` components display each flight object pulled from the datasource. All available flights are displayed in the `<RotationDisplay>` container ordered by ascending time (earliest departures at the top). Flights moved to the `<FlightPlanDisplay>` and added to `currRotation` array when clicked.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+I stopped before being able to implement flight filtration of the `<RotationDisplay>`. The plan was to use a rekeyed version of the flights data array, shaped to an object model like so:
+```
+{
+LSFB: [
+  {flights}, {sorted}, {by}, {departuretime}
+],
+//..etc.
+}
+```
+This would allow me to filter using the last arrival airport of the last element of the rotation array and calculate current available departure time from that last element much faster than using the original object array since I could initially filter by airport using O(1) lookup, then use a linear lookup on a much smaller array. The initial loading time would be slower, but the user would have a more responsive UI when it came to arranging their rotation. There are state hooks that represent those two pieces of state, but their implementation is flawed, as it does not update when flights are deleted from the Rotation queue. The `currAirport` and `currDepartureTime` need to be dynamically assigned using the `currRotation` array instead.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Utilization is not calculated, but would also be dynamically assigned via processing `currRotation`. In planning for data persistence, another objects array would need to be created that held aircraft w/ their respective rotations:
+```
+[
+  {
+    aircraft: {aircraft object},
+    rotation: [{},{},{}...]
+  },
+  //..etc
+]
+```
+## Stretch Goals
+Aside from the implentation details above, given more time I would have created tests from the beginning, built the progress bar with some kind of visualization library, fetched data from a live API, and generally spent more time on styling—perhaps using `styled-components`.
